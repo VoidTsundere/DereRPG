@@ -1,0 +1,23 @@
+{
+  "name": "Dere",
+  "race": "Humano",
+  "hp": 100,
+  "mp": 10,
+  "maxHp": 100,
+  "marMp": 10,
+  "power": 0,
+  "agility": 0,
+  "senses": 0,
+  "magic": 0,
+  "lvl": 0,
+  "upPoints": 0,
+  "local": 0,
+  "localList": 0,
+  "history": 0,
+  "inv1": 0,
+  "inv2": 0,
+  "inv3:": 0,
+  "inv4": 0,
+  "inv5": 0,
+  "deff": 0
+}

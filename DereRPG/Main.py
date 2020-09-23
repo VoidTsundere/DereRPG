@@ -27,12 +27,27 @@ def header(loaded):
 		print('Tsundere RPG version 0.0.0A\n')
 		print(Player.Get.name(),'|HP:',Player.Get.hp(),'|MP:',Player.Get.mp(),'|A:',Player.Get.agility(),'|P:',Player.Get.power(),'|S:',Player.Get.senses(),'|M:',Player.Get.magic(),'|D:',Player.Get.deff())
 
-def console(fight):
+def console(mode):
 	cl = input('Ação: ')
-	if 'new' in cl:
+	if '/new' in cl:
 		new()
-	if 'adm' in cl:
-		Player.Update.local(1)
+
+	if '/lvlUp' in cl:
+		System.LoadData('Dere')
+		header(loaded)
+		System.levelUp()
+		input('\nPrecione Enter para continuar')
+		header(loaded)
+		console(loaded)
+
+	if '/adm' in cl:
+		System.LoadData('Dere')
+		System.Round.checkStats()
+
+	if '/xp' in cl:
+		System.LoadData('Dere')
+		amount = input()
+		Player.Update.xp(amount)
 
 header(loaded)
-console(0)
+console(loaded)

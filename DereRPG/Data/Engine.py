@@ -1,5 +1,10 @@
 import json, os, random
 
+#Tables-----------------------
+lvlXp = [100,150,200,250]
+hpTable = [100,110,120,130]
+mpTable = [10,20,30,40]
+
 class System:
 	def NewSave(name):
 		rawPlayerData = {
@@ -8,7 +13,7 @@ class System:
 			"hp":100,
 			"mp":10,
 			"maxHp":100,
-			"marMp":10,
+			"maxMp":10,
 			"power":0,
 			"agility":0,
 			"senses":0,
@@ -23,7 +28,11 @@ class System:
 			"inv3:":0,
 			"inv4":0,
 			"inv5":0,
-			"deff":0
+			"deff":0,
+			"weapon1":0,
+			"subWeapon1":0,
+			"subWeapon2":0,
+			"xp":0
 			}
 		saveName = 'Saves/'+name+'.JDere'
 		jsonPlayerData = json.dumps(rawPlayerData, indent=2)
@@ -47,6 +56,24 @@ class System:
 			return 0
 		if os.path.exists(saveName) == False:
 			return 1
+
+	def levelUp():
+		if pld['xp'] >= lvlXp[pld['lvl']]:
+			os.system('cls')
+			lvl = pld["lvl"] +1
+			oldHP = Player.Get.maxHp()
+			newHP = hpTable[lvl]
+			oldMP = Player.Get.maxMp()
+			newMP = mpTable[lvl]
+			upMessage = '\nAumentando o seu nível você obteve uma melhora de Hp de {oldHp} para {newHp}\ne tambem uma melhora de Mp de {oldMp} para {newMp}\n tambem recebeu 1 ponto de modificador que pode ser usado com /mod'.format(oldHp=oldHP,newHp=newHP,oldMp=oldMP,newMp=newMP)
+			return print(upMessage)
+		else:
+			return print('\nParece que você ainda não atende aos requeimentos necessários para subir de\nnível, volte denovo quando tiver XP suficiente pra isso')
+
+	class Round:
+		def checkStats():
+			if pld['xp'] >= lvlXp[pld['lvl']]:
+				return print('Parece que você está pronto para subir de nível\nUse /lvlUp para passar para o próximo nível')
 
 class Player:
 	class Get:
@@ -90,6 +117,12 @@ class Player:
 			return pld["inv5"]
 		def deff():
 			return pld["deff"]
+		def weapon1():
+			return pld["weapon1"]
+		def subWeapon1():
+			return["subWeapon1"]
+		def subWeapon2():
+			return pld["subWeapon2"]
 
 	class Update:
 		global _UPDATE_
@@ -108,3 +141,66 @@ class Player:
 
 		def hp(hpUp):
 			_UPDATE_('hp',hpUp)
+
+		def mp(mpUp):
+			_UPDATE_('mp',mpUp)
+
+		def maxHp(maxHpUp):
+			_UPDATE_('maxHp',maxHpUp)
+
+		def maxMp(maxMpUp):
+			_UPDATE_('maxMp',maxMpUp)
+
+		def power(powerUp):
+			_UPDATE_('power',powerUp)
+
+		def senses(sensesUp):
+			_UPDATE_('senses',sensesUp)
+
+		def agility(agilityUp):
+			_UPDATE_('agility',agilityUp)
+
+		def magic(magicUp):
+			_UPDATE_('magic',magicUp)
+
+		def lvl(lvlUp):
+			_UPDATE_('lvl',lvlUp)
+
+		def upPoints(upPointsUp):
+			_UPDATE_('upPoints',upPointsUp)
+
+		def localList(localListUp):
+			_UPDATE_('localList',localListUp)
+
+		def history(historyUp):
+			_UPDATE_('history',historyUp)
+
+		def inv1(inv1Up):
+			_UPDATE_('inv1',inv1Up)
+
+		def inv2(inv2Up):
+			_UPDATE_('inv2',inv2Up)
+
+		def inv3(inv3Up):
+			_UPDATE_('inv3',inv3Up)
+
+		def inv4(inv4Up):
+			_UPDATE_('inv4',inv4Up)
+
+		def inv5(inv5Up):
+			_UPDATE_('inv5',inv5Up)
+
+		def deff(deffUp):
+			_UPDATE_('deff',deffUp)
+
+		def weapon1(weapon1Up):
+			_UPDATE_('weapon1',weapon1Up)
+
+		def subWeapon1(subWeapon1Up):
+			_UPDATE_('subWeapon1',subWeapon1Up)
+
+		def subWeapon2(subWeapon2Up):
+			_UPDATE_('subWeapon2',subWeapon2Up)
+
+		def xp(xpUp):
+			_UPDATE_('xp',int(xpUp))

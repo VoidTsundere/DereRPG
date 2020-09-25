@@ -42,7 +42,7 @@ def console(mode):
 
 	if '/adm' in cl:
 		System.LoadData('Dere')
-		System.Round.checkStats()
+		System.Check.stats()
 
 	if '/xp' in cl:
 		System.LoadData('Dere')

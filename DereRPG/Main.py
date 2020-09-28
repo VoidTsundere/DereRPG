@@ -2,8 +2,11 @@ import sys, os
 sys.path.insert(0, 'data')
 from Engine import *
 
-global loaded
-loaded = 0
+loaded = False
+
+def loadedd():
+	global loaded
+	loaded = True
 
 def new():
 	header(loaded)
@@ -21,10 +24,10 @@ def new():
 
 def header(loaded):
 	os.system('cls')
-	if loaded == 0:
+	if loaded == False:
 		print('Tsundere RPG version 0.0.0A')
-	if loaded == 1:
-		print('Tsundere RPG version 0.0.0A\n')
+	if loaded == True:
+		print('Tsundere RPG version 0.0.0A')
 		print(Player.Get.name(),'|HP:',Player.Get.hp(),'|MP:',Player.Get.mp(),'|A:',Player.Get.agility(),'|P:',Player.Get.power(),'|S:',Player.Get.senses(),'|M:',Player.Get.magic(),'|D:',Player.Get.deff())
 
 def console(mode):
@@ -32,22 +35,45 @@ def console(mode):
 	if '/new' in cl:
 		new()
 
-	if '/lvlUp' in cl:
-		System.LoadData('Dere')
+	if '/load' in cl:
 		header(loaded)
-		System.levelUp()
-		input('\nPrecione Enter para continuar')
+		if System.FindSaves() == True:
+			loadedd()
 		header(loaded)
 		console(loaded)
 
-	if '/adm' in cl:
-		System.LoadData('Dere')
-		System.Check.stats()
+	if loaded == True:
 
-	if '/xp' in cl:
-		System.LoadData('Dere')
-		amount = input()
-		Player.Update.xp(amount)
+		if '/lvlUp' in cl:
+			header(loaded)
+			System.levelUp()
+			input('\nPrecione Enter para continuar')
+			header(loaded)
+			console(loaded)
 
+		if '/stats' in cl:
+			header(loaded)
+			System.Check.stats()
+			input('\nPrecione Enter para continuar')
+			header(loaded)
+			console(loaded)
+
+		if '/xp' in cl:
+			amount = input()
+			Player.Update.xp(amount)
+
+		if '/rec' in cl:
+			Player.Restore.hp('full')
+
+		if '/mod' in cl:
+			header(loaded)
+			print('Sistema ainda não implementado\n')
+			input('Precione Enter para continuar')
+			header(loaded)
+			console(loaded)
+
+		if 'get' in cl:
+			System.BattleSystem.createEnemy(1)
+			input('')
 header(loaded)
 console(loaded)

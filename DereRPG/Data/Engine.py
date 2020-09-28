@@ -4,8 +4,46 @@ import json, os, random, time
 xpTable = [100,150,200,250,300,350,400,450,500,550,600]
 hpTable = [100,110,120,130,140,150,160,170,180,190,200]
 mpTable = [10,20,30,40,50,60,70,80,90,100]
-
+maxLvl = 10
 class System:
+	class BattleSystem:
+		def createEnemy(ID):
+			with open('Data/EnemyTable.JDere') as EnemyTable:
+				Data = json.load(EnemyTable)
+				return print(Data['ID1'])
+
+		def loadEnemy():
+			return
+
+		def attack():
+			return
+
+	def FindSaves():
+		global savesInDir
+		global inVar1
+		savesInDir = 0
+		inVar1 = 0
+		saves = []
+		for files in os.listdir("saves"):
+			if files.endswith(".JDere"):
+				data = files.replace('.JDere','')
+				saves.append(data)
+				savesInDir+=1
+				print('')
+		while inVar1 <= savesInDir:
+			if inVar1+1 > savesInDir:
+				break
+			print(' ',inVar1,saves[inVar1])
+			inVar1 +=1
+		print('\nDigite o número do save para carrega-lo')
+		sellect = input('Save:')
+		if int(sellect) > savesInDir:
+			print('Save não existe\n')
+			input('Precione Enter para continuar')
+		else:
+			System.LoadData(saves[int(sellect)])
+			return True
+		
 	def NewSave(name):
 		rawPlayerData = {
 			"name":name,
@@ -59,39 +97,53 @@ class System:
 			return 1
 
 	def levelUp():
-		if pld['xp'] >= xpTable[pld['lvl']]:
-			os.system('cls')
-			lvl = pld["lvl"] +1
-			oldHP = Player.Get.maxHp()
-			newHP = hpTable[lvl]
-			oldMP = Player.Get.maxMp()
-			newMP = mpTable[lvl]
-			#Update values----
-			VarPoints = Player.Get.upPoints() +1
-			Player.Update.upPoints(VarPoints)
+		global upPossibility
+		upPossibility = True
+		if Player.Get.lvl() >= maxLvl:
+			upPossibility = False
 
-			VarXp = Player.Get.xp() -xpTable[Player.Get.lvl()]
-			Player.Update.xp(VarXp)
+		if upPossibility == True:
+			if pld['xp'] >= xpTable[pld['lvl']]:
+				lvl = pld["lvl"] +1
+				oldHP = Player.Get.maxHp()
+				newHP = hpTable[lvl]
+				oldMP = Player.Get.maxMp()
+				newMP = mpTable[lvl]
+				#Update values----
+				if upPossibility == True:
+					VarPoints = Player.Get.upPoints() +1
+					Player.Update.upPoints(VarPoints)
 
-			VarLvl = Player.Get.lvl() +1
-			Player.Update.lvl(VarLvl)
+					VarXp = Player.Get.xp() -xpTable[Player.Get.lvl()]
+					Player.Update.xp(VarXp)
 
-			Player.Update.maxHp(newHP)
-			Player.Update.maxMp(newMP)
+					VarLvl = Player.Get.lvl() +1
+					Player.Update.lvl(VarLvl)
 
-			Player.Restore.hp('full')
-			Player.Restore.mp('full')
-			
-			#Update values----
-			upMessage = '\nAumentando o seu nível você obteve uma melhora de Hp de {oldHp} para {newHp}\ne tambem uma melhora de Mp de {oldMp} para {newMp}\n tambem recebeu 1 ponto de modificador que pode ser usado com /mod'.format(oldHp=oldHP,newHp=newHP,oldMp=oldMP,newMp=newMP)
-			return print(upMessage)
+					Player.Update.maxHp(newHP)
+					Player.Update.maxMp(newMP)
+				
+				#Update values----
+					upMessage = '\nAumentando o seu nível você obteve uma melhora de Hp de {oldHp} para {newHp}\ne tambem uma melhora de Mp de {oldMp} para {newMp}\n tambem recebeu 1 ponto de modificador que pode ser usado com /mod'.format(oldHp=oldHP,newHp=newHP,oldMp=oldMP,newMp=newMP)
+					print(upMessage)
+			else:
+				print('\nParece que você ainda não atende aos requeimentos necessários para subir de\nnível, volte denovo quando tiver XP suficiente pra isso')
 		else:
-			return print('\nParece que você ainda não atende aos requeimentos necessários para subir de\nnível, volte denovo quando tiver XP suficiente pra isso')
+			print('\nParece que você ja está no nível máximo do jogo')
 
 	class Check:
 		def stats():
+			global message
 			if pld['xp'] >= xpTable[pld['lvl']]:
-				return print('Parece que você está pronto para subir de nível\nUse /lvlUp para passar para o próximo nível')
+				message = '\nParece que você está pronto para subir de nível\nUse /lvlUp para passar para o próximo nível'
+				print(message)
+				if Player.Get.upPoints() > 0:
+					print('\nVocê tambem possui {points} pontos de Upgrade para serem usados com o /mod'.format(points = Player.Get.upPoints()))
+			
+
+		def history():
+			if Player.Get.history() == 0:
+				Player.History.tutorial_part_1()
 
 class Player:
 	class Get:
@@ -254,4 +306,9 @@ class Player:
 			_UPDATE_('subWeapon2',subWeapon2Up)
 
 		def xp(xpUp):
-			_UPDATE_('xp',xpUp)
+			_UPDATE_('xp',int(xpUp))
+
+	class History:
+		def tutorial_part_1():
+			if Player.Get.history() == 0:
+				print('Você se encontra perdido em uma sala de pedra, olhando em volta você consegue ver uma luz que parece vir de um portal estranho')

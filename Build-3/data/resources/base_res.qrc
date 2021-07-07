@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="fonts">
+    <file>fonts/Modeseven.ttf</file>
+  </qresource>
+</RCC>
